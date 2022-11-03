@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "X9dyJs4IjSAXqPpc6ChQoe3ps1wj2qdak1f7poZLN9P6Nct4GIxJOUy1NtqTTHtuKE5q8NOzlx1Vi988kjgt4Q==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bitty\\source\\repos\\cleancopy\\BackgammonProject\\BackgammonOct12.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bitty\\.nuget\\packages\\monogame.content.builder.task\\3.8.1.303\\monogame.content.builder.task.3.8.1.303.nupkg.sha512",
+    "C:\\Users\\bitty\\.nuget\\packages\\monogame.framework.desktopgl\\3.8.1.303\\monogame.framework.desktopgl.3.8.1.303.nupkg.sha512"
+  ],
+  "logs": []
+}
