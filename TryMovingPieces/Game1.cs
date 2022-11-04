@@ -8,6 +8,7 @@ namespace TryMovingPieces
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
+
         private SpriteBatch _spriteBatch;
 
         Texture2D gameBoard;
@@ -32,6 +33,9 @@ namespace TryMovingPieces
         int valueDieTwo;
         int valueDieThree;
         int valueDieFour;
+
+        int[] yPosition = new int[12] {438, 399, 360, 321, 282, 243, 2, 41, 80, 119, 158, 197};
+        int[] xPosition = new int[12] {709, 649, 591, 531, 473, 413, 355, 295, 238, 176, 119, 59};
 
         MouseState mState;
 
@@ -115,17 +119,7 @@ namespace TryMovingPieces
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            mState = Mouse.GetState();
-
-            while (mState.LeftButton == ButtonState.Pressed)
-            {
-                _spriteBatch.Begin();
-                _spriteBatch.Draw(blackPieces[5], new Vector2(100, 100), Color.Black);
-                //_spriteBatch.Draw(SpotAvailablePointingUp[0], new Vector2(250, 250), Color.White);
-                _spriteBatch.End();
-            }
+                Exit();            
 
             base.Update(gameTime);
         }
@@ -147,56 +141,44 @@ namespace TryMovingPieces
                     Of
                 );
 
-            for (int x = 0; x < 3; x++)
+            for (int x = 0; x < 6; x++)
             {
-                _spriteBatch.Draw(DarkTrianglesPointingDown[x], new Vector2((140 * x) + 49, 2), Color.White);
-                _spriteBatch.Draw(LightTrianglesPointingDown[x], new Vector2((140 * x) + 407, 2), Color.White);
+                _spriteBatch.Draw(DarkTrianglesPointingDown[x], new Vector2((118 * x) + 49, 2), Color.White);
+                _spriteBatch.Draw(LightTrianglesPointingDown[x], new Vector2((118 * x) + 109, 2), Color.White);
             }
 
-            for (int x = 0; x < 2; x++)
+            for (int x = 0; x < 6; x++)
             {
-                _spriteBatch.Draw(LightTrianglesPointingDown[x], new Vector2((140 * x) + 120, 2), Color.White);
-                _spriteBatch.Draw(DarkTrianglesPointingDown[x], new Vector2((140 * x) + 480, 2), Color.White);
-            }
-
-            for (int x = 0; x < 3; x++)
-            {
-                _spriteBatch.Draw(LightTrianglesPointingUp[x], new Vector2((140 * x) + 49, 280), Color.White);
-                _spriteBatch.Draw(DarkTrianglesPointingUp[x], new Vector2((140 * x) + 407, 280), Color.White);
-            }
-
-            for (int x = 0; x < 2; x++)
-            {
-                _spriteBatch.Draw(LightTrianglesPointingUp[x], new Vector2((140 * x) + 480, 280), Color.White);
-                _spriteBatch.Draw(DarkTrianglesPointingUp[x], new Vector2((140 * x) + 120, 280), Color.White);
+                _spriteBatch.Draw(LightTrianglesPointingUp[x], new Vector2((118 * x) + 49, 280), Color.White);
+                _spriteBatch.Draw(DarkTrianglesPointingUp[x], new Vector2((118 * x) + 109, 280), Color.White);
             }
 
             for (int y = 0; y < 5; y++)
             {
                 // Black Pieces Left Stack of 5
-                _spriteBatch.Draw(blackPieces[y], new Vector2(59, 438 - (y * 39)), Color.Black);
+                _spriteBatch.Draw(blackPieces[y], new Vector2(xPosition[11], yPosition[y]), Color.Black);
                 // White Pieces Left Stack of 5
-                _spriteBatch.Draw(whitePieces[y], new Vector2(59, 0 + (y * 39)), Color.White);
+                _spriteBatch.Draw(whitePieces[y], new Vector2(xPosition[11], yPosition[y + 6]), Color.White);
                 // Black Pieces Right Stack of 5
-                _spriteBatch.Draw(blackPieces[y + 8], new Vector2(417, 0 + (y * 39)), Color.Black);
+                _spriteBatch.Draw(blackPieces[y + 8], new Vector2(xPosition[5], yPosition[y + 6]), Color.Black);
                 // White Pieces Right Stack of 5
-                _spriteBatch.Draw(whitePieces[y + 8], new Vector2(417, 438 - (y * 39)), Color.White);
+                _spriteBatch.Draw(whitePieces[y + 8], new Vector2(xPosition[5], yPosition[y]), Color.White);
             }
 
             for (int y = 0; y < 3; y++)
             {
                 // Black Pieces Left Stack of 3
-                _spriteBatch.Draw(blackPieces[y + 5], new Vector2(199, 0 + (y * 39)), Color.Black);
+                _spriteBatch.Draw(blackPieces[y + 5], new Vector2(xPosition[7], yPosition[y + 6]), Color.Black);
                 // White Pieces Left Stack of 3
-                _spriteBatch.Draw(whitePieces[y + 5], new Vector2(199, 438 - (y * 39)), Color.White);
+                _spriteBatch.Draw(whitePieces[y + 5], new Vector2(xPosition[7], yPosition[y]), Color.White);
             }
 
             for (int y = 0; y < 2; y++)
             {
                 // Black Pieces Right Stack of 2
-                _spriteBatch.Draw(blackPieces[y + 13], new Vector2(697, 438 - (y * 39)), Color.Black);
+                _spriteBatch.Draw(blackPieces[y + 13], new Vector2(xPosition[0], yPosition[y]), Color.Black);
                 // White Pieces Left Stack of 3
-                _spriteBatch.Draw(whitePieces[y + 13], new Vector2(697, 0 + (y * 39)), Color.White);
+                _spriteBatch.Draw(whitePieces[y + 13], new Vector2(xPosition[0], yPosition[y + 6]), Color.White);
             }
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
