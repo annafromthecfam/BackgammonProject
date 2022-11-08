@@ -2,6 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Media;
+
+/*SoundPlayer = new SoundPlayer("");
+PlayerIndex.PlayLooping();*/
 
 namespace TryMovingPieces
 {
@@ -14,6 +18,9 @@ namespace TryMovingPieces
         Texture2D gameBoard;
         Vector2 gameBoardPosistion;
         float Of;
+
+        Texture2D rollDiceButton;
+        Texture2D[] whosTurn = new Texture2D[2];
 
         Texture2D[] DarkTrianglesPointingDown = new Texture2D[6];
         Texture2D[] LightTrianglesPointingDown = new Texture2D[6];
@@ -63,6 +70,8 @@ namespace TryMovingPieces
 
             RollDice();
 
+            
+
             base.Initialize();
         }
 
@@ -71,6 +80,8 @@ namespace TryMovingPieces
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             gameBoard = Content.Load<Texture2D>("BlankGameBoard");
+
+            rollDiceButton = Content.Load<Texture2D>("RollDiceButton");
 
             dieOne[0] = Content.Load<Texture2D>("whitedie1");
             dieOne[1] = Content.Load<Texture2D>("whitedie2");
@@ -114,6 +125,10 @@ namespace TryMovingPieces
                 blackPieces[x] = Content.Load<Texture2D>("BlackPiece");
                 whitePieces[x] = Content.Load<Texture2D>("WhitePiece");
             }
+
+            whosTurn[0] = Content.Load<Texture2D>("Player1Turn");
+            whosTurn[1] = Content.Load<Texture2D>("Player2Turn");
+
         }
 
         protected override void Update(GameTime gameTime)
@@ -190,7 +205,12 @@ namespace TryMovingPieces
                 _spriteBatch.Draw(dieFour[valueDieFour], new Vector2(70, 226), Color.White);
             }
 
+            _spriteBatch.Draw(rollDiceButton, new Vector2(500, 215), Color.White);
+
+            _spriteBatch.Draw(whosTurn[0], new Vector2(300 ,230), Color.White);
+
             _spriteBatch.End();
+
 
             base.Draw(gameTime);
         }
