@@ -16,7 +16,7 @@ namespace TryMovingPieces
         private SpriteBatch _spriteBatch;
 
         Texture2D gameBoard;
-        Vector2 gameBoardPosistion;
+        Vector2 gameBoardPosition;
         float Of;
 
         Texture2D rollDiceButton;
@@ -40,11 +40,14 @@ namespace TryMovingPieces
         int valueDieTwo;
         int valueDieThree;
         int valueDieFour;
+        int RollDiceButtonRadius = 35;
+        Vector2 RollDiceButtonPosition = new Vector2(670, 205);
 
         int[] yPosition = new int[12] {438, 399, 360, 321, 282, 243, 2, 41, 80, 119, 158, 197};
         int[] xPosition = new int[12] {709, 649, 591, 531, 473, 413, 355, 295, 238, 176, 119, 59};
 
         MouseState mState;
+        bool mReleased;
 
         void RollDice()
         {
@@ -66,11 +69,8 @@ namespace TryMovingPieces
 
         protected override void Initialize()
         {
-            gameBoardPosistion = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
-
-            RollDice();
-
-            
+            gameBoardPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
+                       
 
             base.Initialize();
         }
@@ -134,7 +134,25 @@ namespace TryMovingPieces
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();            
+                Exit();
+
+            mState = Mouse.GetState();
+
+            if (mState.LeftButton == ButtonState.Pressed && mReleased == true)
+            {
+                float mouseRollDiceButtonDistance = Vector2.Distance(new Vector2(RollDiceButtonPosition.X + RollDiceButtonRadius, RollDiceButtonPosition.Y + RollDiceButtonRadius), mState.Position.ToVector2());
+                if (mouseRollDiceButtonDistance < RollDiceButtonRadius)
+                {
+                    RollDice();
+                    mReleased = false;
+                }
+          
+            }
+
+            if (mState.LeftButton == ButtonState.Released)
+            {
+                mReleased = true;
+            }
 
             base.Update(gameTime);
         }
@@ -146,7 +164,7 @@ namespace TryMovingPieces
             _spriteBatch.Begin();
             _spriteBatch.Draw(
                     gameBoard,
-                    gameBoardPosistion,
+                    gameBoardPosition,
                     null,
                     Color.White,
                     Of,
@@ -205,9 +223,9 @@ namespace TryMovingPieces
                 _spriteBatch.Draw(dieFour[valueDieFour], new Vector2(70, 226), Color.White);
             }
 
-            _spriteBatch.Draw(rollDiceButton, new Vector2(500, 215), Color.White);
+            _spriteBatch.Draw(rollDiceButton, RollDiceButtonPosition, Color.White);
 
-            _spriteBatch.Draw(whosTurn[0], new Vector2(300 ,230), Color.White);
+            _spriteBatch.Draw(whosTurn[0], new Vector2(450 ,230), Color.White);
 
             _spriteBatch.End();
 
