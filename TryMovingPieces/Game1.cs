@@ -40,7 +40,7 @@ namespace TryMovingPieces
         int valueDieTwo;
         int valueDieThree;
         int valueDieFour;
-        int RollDiceButtonRadius = 35;
+        int RollDiceButtonRadius = 34;
         Vector2 RollDiceButtonPosition = new Vector2(670, 205);
 
         int[] yPosition = new int[12] {438, 399, 360, 321, 282, 243, 2, 41, 80, 119, 158, 197};
