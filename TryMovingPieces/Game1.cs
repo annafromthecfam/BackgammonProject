@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Media;
+using System.Runtime.CompilerServices;
 
 /*SoundPlayer = new SoundPlayer("");
 PlayerIndex.PlayLooping();*/
@@ -43,11 +44,39 @@ namespace TryMovingPieces
         int RollDiceButtonRadius = 34;
         Vector2 RollDiceButtonPosition = new Vector2(670, 205);
 
-        int[] yPosition = new int[12] {438, 399, 360, 321, 282, 243, 2, 41, 80, 119, 158, 197};
-        int[] xPosition = new int[12] {709, 649, 591, 531, 473, 413, 355, 295, 238, 176, 119, 59};
+        int[] yPosition = new int[12] { 438, 399, 360, 321, 282, 243, 2, 41, 80, 119, 158, 197 };
+        int[] xPosition = new int[12] { 709, 649, 591, 531, 473, 413, 355, 295, 238, 176, 119, 59 };
+
+        Vector2[] blackPiecePosition;
+        Vector2[] whitePiecePosition;
+        Vector2 savedPosition;
+
+        Vector2[] columnLeftRightBoundaries = new Vector2[24] { new Vector2(709,709+30), new Vector2(649,649+30), new Vector2(591, 591+30),
+                                                                new Vector2(531,531+30), new Vector2(473,473+30), new Vector2(413, 413+30),
+                                                                new Vector2(355, 355+30), new Vector2(295,295+30), new Vector2(238,238+30),
+                                                                new Vector2(176,176+30), new Vector2(119,199+30), new Vector2(59,59+30),
+                                                                new Vector2(59,59+30), new Vector2(119,199+30), new Vector2(176,176+30),
+                                                                new Vector2(238,238+30), new Vector2(295,295+30), new Vector2(355, 355+30),
+                                                                new Vector2(413, 413+30), new Vector2(473,473+30), new Vector2(531,531+30),
+                                                                new Vector2(591, 591+30), new Vector2(649,649+30), new Vector2(709,709+30)};
+
+        Vector2[] columnTopBottomBoundaries = new Vector2[24] { new Vector2 (254,474), new Vector2(254, 474), new Vector2(254, 474),
+                                                                new Vector2 (254,474), new Vector2 (254,474), new Vector2 (254,474),
+                                                                new Vector2 (254,474), new Vector2 (254,474), new Vector2 (254,474),
+                                                                new Vector2 (254,474), new Vector2 (254,474), new Vector2 (254,474),
+                                                                new Vector2 (2,198), new Vector2 (2,198), new Vector2 (2,198),
+                                                                new Vector2 (2,198), new Vector2 (2,198), new Vector2 (2,198),
+                                                                new Vector2 (2,198), new Vector2 (2,198), new Vector2 (2,198),
+                                                                new Vector2 (2,198), new Vector2 (2,198), new Vector2 (2,198),};
+
+
+        string[] columnStatus = new string[24] {"black", "open", "open", "open", "open", "white", "open", "white",
+                                                "open", "open", "open", "black", "white", "open", "open", "open",
+                                                "black", "open", "black", "open", "open", "open", "open", "white"};
 
         MouseState mState;
         bool mReleased;
+        bool allowDiceRoll;
 
         void RollDice()
         {
@@ -60,6 +89,17 @@ namespace TryMovingPieces
             }
 
         }
+
+        bool PlayerOneTurn()
+        {
+            return true;
+        }
+
+        bool PlayerTwoTurn()
+        {
+            return true;
+        }
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -70,7 +110,24 @@ namespace TryMovingPieces
         protected override void Initialize()
         {
             gameBoardPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
-                       
+            
+            blackPiecePosition = new Vector2[15] {  new Vector2(xPosition[0], yPosition[0]), new Vector2(xPosition[0], yPosition[1]),
+                                                            new Vector2(xPosition[11], yPosition[0]), new Vector2(xPosition[11], yPosition[1]),
+                                                            new Vector2(xPosition[11], yPosition[2]), new Vector2(xPosition[11], yPosition[3]),
+                                                            new Vector2(xPosition[11], yPosition[4]), new Vector2(xPosition[7], yPosition[6]),
+                                                            new Vector2(xPosition[7], yPosition[7]),
+                                                            new Vector2(xPosition[7], yPosition[8]), new Vector2(xPosition[5], yPosition[6]),
+                                                            new Vector2(xPosition[5], yPosition[7]), new Vector2(xPosition[5], yPosition[8]),
+                                                            new Vector2(xPosition[5], yPosition[9]), new Vector2(xPosition[5], yPosition[10])};
+
+            whitePiecePosition = new Vector2[15] {  new Vector2(xPosition[5], yPosition[0]), new Vector2(xPosition[5], yPosition[1]),
+                                                            new Vector2(xPosition[5], yPosition[2]), new Vector2(xPosition[5], yPosition[3]),
+                                                            new Vector2(xPosition[5], yPosition[4]), new Vector2(xPosition[7], yPosition[0]),
+                                                            new Vector2(xPosition[7], yPosition[1]), new Vector2(xPosition[7], yPosition[2]),
+                                                            new Vector2(xPosition[11], yPosition[6]),
+                                                            new Vector2(xPosition[11], yPosition[7]), new Vector2(xPosition[11], yPosition[8]),
+                                                            new Vector2(xPosition[11], yPosition[9]), new Vector2(xPosition[11], yPosition[10]),
+                                                            new Vector2(xPosition[0], yPosition[6]), new Vector2(xPosition[0], yPosition[7])};
 
             base.Initialize();
         }
@@ -133,6 +190,7 @@ namespace TryMovingPieces
 
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -140,18 +198,52 @@ namespace TryMovingPieces
 
             if (mState.LeftButton == ButtonState.Pressed && mReleased == true)
             {
-                float mouseRollDiceButtonDistance = Vector2.Distance(new Vector2(RollDiceButtonPosition.X + RollDiceButtonRadius, RollDiceButtonPosition.Y + RollDiceButtonRadius), mState.Position.ToVector2());
-                if (mouseRollDiceButtonDistance < RollDiceButtonRadius)
+                if (allowDiceRoll == true)
                 {
-                    RollDice();
-                    mReleased = false;
+                    float mouseRollDiceButtonDistance = Vector2.Distance(new Vector2(RollDiceButtonPosition.X + RollDiceButtonRadius, RollDiceButtonPosition.Y + RollDiceButtonRadius), mState.Position.ToVector2());
+                    if (mouseRollDiceButtonDistance < RollDiceButtonRadius)
+                    {
+                        RollDice();
+                        mReleased = false;
+                    }
                 }
-          
+
+                if (PlayerOneTurn())
+                {
+                    for (int x = 0; x < 15; x++)
+                    {
+                        float mousePieceDistance = Vector2.Distance(new Vector2(blackPiecePosition[x].X, blackPiecePosition[x].Y), mState.Position.ToVector2());
+                        if (mousePieceDistance < 30)
+                        {
+                            savedPosition = blackPiecePosition[x];
+                            blackPiecePosition[x] = mState.Position.ToVector2();
+                        }
+                    }
+                }
+
+                if (PlayerTwoTurn())
+                {
+                    for (int x = 0; x < 15; x++)
+                    {
+                        float mousePieceDistance = Vector2.Distance(new Vector2(whitePiecePosition[x].X, whitePiecePosition[x].Y), mState.Position.ToVector2());
+                        if (mousePieceDistance < 30)
+                        {
+                            savedPosition = whitePiecePosition[x];
+                            whitePiecePosition[x] = mState.Position.ToVector2();
+                        }
+                    }
+                }
+
             }
 
             if (mState.LeftButton == ButtonState.Released)
             {
                 mReleased = true;
+            }
+
+            if (PlayerOneTurn())
+            {
+                allowDiceRoll = true;
             }
 
             base.Update(gameTime);
@@ -189,29 +281,29 @@ namespace TryMovingPieces
             for (int y = 0; y < 5; y++)
             {
                 // Black Pieces Left Stack of 5
-                _spriteBatch.Draw(blackPieces[y], new Vector2(xPosition[11], yPosition[y]), Color.Black);
+                _spriteBatch.Draw(blackPieces[y], blackPiecePosition[y + 2], Color.Black);
                 // White Pieces Left Stack of 5
-                _spriteBatch.Draw(whitePieces[y], new Vector2(xPosition[11], yPosition[y + 6]), Color.White);
+                _spriteBatch.Draw(whitePieces[y], whitePiecePosition[y + 8], Color.White);
                 // Black Pieces Right Stack of 5
-                _spriteBatch.Draw(blackPieces[y + 8], new Vector2(xPosition[5], yPosition[y + 6]), Color.Black);
+                _spriteBatch.Draw(blackPieces[y + 8], blackPiecePosition[y + 10], Color.Black);
                 // White Pieces Right Stack of 5
-                _spriteBatch.Draw(whitePieces[y + 8], new Vector2(xPosition[5], yPosition[y]), Color.White);
+                _spriteBatch.Draw(whitePieces[y + 8], whitePiecePosition[y], Color.White);
             }
 
             for (int y = 0; y < 3; y++)
             {
                 // Black Pieces Left Stack of 3
-                _spriteBatch.Draw(blackPieces[y + 5], new Vector2(xPosition[7], yPosition[y + 6]), Color.Black);
+                _spriteBatch.Draw(blackPieces[y + 5], blackPiecePosition[y + 7], Color.Black);
                 // White Pieces Left Stack of 3
-                _spriteBatch.Draw(whitePieces[y + 5], new Vector2(xPosition[7], yPosition[y]), Color.White);
+                _spriteBatch.Draw(whitePieces[y + 5], whitePiecePosition[y + 5], Color.White);
             }
 
             for (int y = 0; y < 2; y++)
             {
                 // Black Pieces Right Stack of 2
-                _spriteBatch.Draw(blackPieces[y + 13], new Vector2(xPosition[0], yPosition[y]), Color.Black);
-                // White Pieces Left Stack of 3
-                _spriteBatch.Draw(whitePieces[y + 13], new Vector2(xPosition[0], yPosition[y + 6]), Color.White);
+                _spriteBatch.Draw(blackPieces[y + 13], blackPiecePosition[y], Color.Black);
+                // White Pieces Left Stack of 2
+                _spriteBatch.Draw(whitePieces[y + 13], whitePiecePosition[y + 13], Color.White);
             }
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
