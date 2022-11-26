@@ -213,13 +213,15 @@ namespace TryMovingPieces
                     for (int x = 0; x < 15; x++)
                     {
                         float mousePieceDistance = Vector2.Distance(new Vector2(blackPiecePosition[x].X, blackPiecePosition[x].Y), mState.Position.ToVector2());
-                        if (mousePieceDistance < 30)
+                        if (mousePieceDistance < 30 /*&& mState.LeftButton == ButtonState.Pressed*/)
                         {
                             savedPosition = blackPiecePosition[x];
-                            blackPiecePosition[x] = mState.Position.ToVector2();
+                            blackPiecePosition[x] = mState.Position.ToVector2(); 
                         }
                     }
                 }
+
+                
 
                 if (PlayerTwoTurn())
                 {
