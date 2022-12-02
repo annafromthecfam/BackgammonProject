@@ -109,6 +109,18 @@
 /processorParam:TextureFormat=Color
 /build:BlankGameBoard.png
 
+#begin BluePiece.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:BluePiece.png
+
 #begin DarkGreenPointingDown.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -241,6 +253,30 @@
 /processorParam:TextureFormat=Color
 /build:Player2Turn.png
 
+#begin PlayerOneWin.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:PlayerOneWin.jpg
+
+#begin PlayerTwoWin.jpg
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:PlayerTwoWin.jpg
+
 #begin RollDiceButton.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -276,6 +312,12 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpotAvailablePointingUp.png
+
+#begin testsoundeffect2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:testsoundeffect2.mp3
 
 #begin whitedie1.png
 /importer:TextureImporter

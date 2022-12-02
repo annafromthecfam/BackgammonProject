@@ -2,52 +2,56 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Media;
-
-/*SoundPlayer = new SoundPlayer("");
-PlayerIndex.PlayLooping();*/
+using Microsoft.Xna.Framework.Media;
 
 namespace TryMovingPieces
 {
+
+
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-
         private SpriteBatch _spriteBatch;
 
+        Texture2D bluePiece;
         Texture2D gameBoard;
-        Vector2 gameBoardPosition;
-        float Of;
-
-        Texture2D rollDiceButton;
-        Texture2D[] whosTurn = new Texture2D[2];
-
-        Texture2D[] DarkTrianglesPointingDown = new Texture2D[6];
-        Texture2D[] LightTrianglesPointingDown = new Texture2D[6];
-        Texture2D[] DarkTrianglesPointingUp = new Texture2D[6];
-        Texture2D[] LightTrianglesPointingUp = new Texture2D[6];
-        Texture2D[] SpotAvailablePointingUp = new Texture2D[6];
-
+        Texture2D[] darkTrianglesPointingDown = new Texture2D[6];
+        Texture2D[] lightTrianglesPointingDown = new Texture2D[6];
+        Texture2D[] darkTrianglesPointingUp = new Texture2D[6];
+        Texture2D[] lightTrianglesPointingUp = new Texture2D[6];
         Texture2D[] blackPieces = new Texture2D[15];
         Texture2D[] whitePieces = new Texture2D[15];
+        Texture2D[] winner = new Texture2D[2];
+        Vector2 bluePiecePosition;
+        Vector2 savedPosition;
+        Vector2 gameBoardPosition;
+        Vector2[] blackPiecePosition = new Vector2[15];
+        Vector2[] whitePiecePosition = new Vector2[15];
+        int[] yPosition = new int[12];
+        int[] xPosition = new int[12];
+        bool rightKeyReleased;
+        bool leftKeyReleased;
+        bool upKeyReleased;
+        bool downKeyReleased;
+        bool mReleased;
+        bool player1Wins;
+        bool player2Wins;
+        float Of;
+        MouseState mState;
+        Song song;
 
         Random random = new Random();
         Texture2D[] dieOne = new Texture2D[6];
         Texture2D[] dieTwo = new Texture2D[6];
         Texture2D[] dieThree = new Texture2D[6];
         Texture2D[] dieFour = new Texture2D[6];
+        Texture2D rollDiceButton;
         int valueDieOne;
         int valueDieTwo;
         int valueDieThree;
         int valueDieFour;
         int RollDiceButtonRadius = 34;
         Vector2 RollDiceButtonPosition = new Vector2(670, 205);
-
-        int[] yPosition = new int[12] {438, 399, 360, 321, 282, 243, 2, 41, 80, 119, 158, 197};
-        int[] xPosition = new int[12] {709, 649, 591, 531, 473, 413, 355, 295, 238, 176, 119, 59};
-
-        MouseState mState;
-        bool mReleased;
 
         void RollDice()
         {
@@ -60,6 +64,14 @@ namespace TryMovingPieces
             }
 
         }
+        void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
+        {
+           // 0.0f is silent, 1.0f is full volume
+           MediaPlayer.Volume -= 0.1f;
+           MediaPlayer.Play(song);
+        }
+
+
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -69,17 +81,66 @@ namespace TryMovingPieces
 
         protected override void Initialize()
         {
-            gameBoardPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
-                       
+            for (int x = 0; x < 12; x++)
+            {
+                xPosition[x] = 59 + (x * 59);
+                yPosition[x] = 2 + (x * 39);
+            }
 
+            bluePiecePosition = new Vector2(xPosition[0], yPosition[0]);
+            rightKeyReleased = true;
+            leftKeyReleased = true;
+            upKeyReleased = true;
+            downKeyReleased = true;
+            gameBoardPosition = new Vector2(_graphics.PreferredBackBufferWidth / 2, _graphics.PreferredBackBufferHeight / 2);
+            blackPiecePosition = new Vector2[15] {  new Vector2(xPosition[0], yPosition[0]), new Vector2(xPosition[0], yPosition[1]),
+                                                    new Vector2(xPosition[0], yPosition[2]), new Vector2(xPosition[0], yPosition[3]),
+                                                    new Vector2(xPosition[0], yPosition[4]), new Vector2(xPosition[11], yPosition[0]),
+                                                    new Vector2(xPosition[11], yPosition[1]), new Vector2(xPosition[4], yPosition[9]),
+                                                    new Vector2(xPosition[4], yPosition[10]), new Vector2(xPosition[4], yPosition[11]),
+                                                    new Vector2(xPosition[6], yPosition[7]), new Vector2(xPosition[6], yPosition[8]),
+                                                    new Vector2(xPosition[6], yPosition[9]), new Vector2(xPosition[6], yPosition[10]),
+                                                    new Vector2(xPosition[6], yPosition[11])};
+
+            whitePiecePosition = new Vector2[15] {  new Vector2(xPosition[0], yPosition[7]), new Vector2(xPosition[0], yPosition[8]),
+                                                    new Vector2(xPosition[0], yPosition[9]), new Vector2(xPosition[0], yPosition[10]),
+                                                    new Vector2(xPosition[0], yPosition[11]), new Vector2(xPosition[4], yPosition[0]),
+                                                    new Vector2(xPosition[4], yPosition[1]), new Vector2(xPosition[4], yPosition[2]),
+                                                    new Vector2(xPosition[6], yPosition[0]), new Vector2(xPosition[6], yPosition[1]),
+                                                    new Vector2(xPosition[6], yPosition[2]), new Vector2(xPosition[6], yPosition[3]),
+                                                    new Vector2(xPosition[6], yPosition[4]), new Vector2(xPosition[11], yPosition[10]),
+                                                    new Vector2(xPosition[11], yPosition[11])};
             base.Initialize();
         }
 
         protected override void LoadContent()
+
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            bluePiece = Content.Load<Texture2D>("BluePiece");
             gameBoard = Content.Load<Texture2D>("BlankGameBoard");
+            this.song = Content.Load<Song>("testsoundeffect2");
+            MediaPlayer.Play(song);
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
+
+            winner[0] = Content.Load<Texture2D>("PlayerOneWin");
+            winner[1] = Content.Load<Texture2D>("PlayerTwoWin");
+
+            for (int x = 0; x < 6; x++)
+            {
+                darkTrianglesPointingDown[x] = Content.Load<Texture2D>("DarkGreenPointingDown");
+                lightTrianglesPointingDown[x] = Content.Load<Texture2D>("LightGreenPointingDown");
+                darkTrianglesPointingUp[x] = Content.Load<Texture2D>("DarkGreenPointingUp");
+                lightTrianglesPointingUp[x] = Content.Load<Texture2D>("LightGreenPointingUp");
+            }
+
+            for (int x = 0; x < 15; x++)
+            {
+                blackPieces[x] = Content.Load<Texture2D>("BlackPiece");
+                whitePieces[x] = Content.Load<Texture2D>("WhitePiece");
+            }
 
             rollDiceButton = Content.Load<Texture2D>("RollDiceButton");
 
@@ -110,25 +171,6 @@ namespace TryMovingPieces
             dieFour[3] = Content.Load<Texture2D>("whitedie4");
             dieFour[4] = Content.Load<Texture2D>("whitedie5");
             dieFour[5] = Content.Load<Texture2D>("whitedie6");
-
-            for (int x = 0; x < 6; x++)
-            {
-                DarkTrianglesPointingDown[x] = Content.Load<Texture2D>("DarkGreenPointingDown");
-                LightTrianglesPointingDown[x] = Content.Load<Texture2D>("LightGreenPointingDown");
-                DarkTrianglesPointingUp[x] = Content.Load<Texture2D>("DarkGreenPointingUp");
-                LightTrianglesPointingUp[x] = Content.Load<Texture2D>("LightGreenPointingUp");
-                SpotAvailablePointingUp[x] = Content.Load<Texture2D>("SpotAvailablePointingUp");
-            }
-
-            for (int x = 0; x < 15; x++)
-            {
-                blackPieces[x] = Content.Load<Texture2D>("BlackPiece");
-                whitePieces[x] = Content.Load<Texture2D>("WhitePiece");
-            }
-
-            whosTurn[0] = Content.Load<Texture2D>("Player1Turn");
-            whosTurn[1] = Content.Load<Texture2D>("Player2Turn");
-
         }
 
         protected override void Update(GameTime gameTime)
@@ -136,8 +178,170 @@ namespace TryMovingPieces
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            mState = Mouse.GetState();
+            if (blackPiecePosition[0] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[1] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[2] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[3] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[4] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[5] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[6] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[7] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[8] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[9] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[10] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[11] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[12] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[13] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                blackPiecePosition[14] == new Vector2(xPosition[11] + 59, yPosition[0]))
+            {
+                player1Wins = true;
+            }
 
+            if (whitePiecePosition[0] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[1] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[2] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[3] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[4] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[5] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[6] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[7] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[8] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[9] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[10] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[11] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[12] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[13] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                whitePiecePosition[14] == new Vector2(xPosition[11] + 59, yPosition[11]))
+            {
+                player2Wins = true;
+            }
+
+            mState = Mouse.GetState();
+            // Right Key Logic
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) && rightKeyReleased == true)
+            {
+                savedPosition = bluePiecePosition;
+                bluePiecePosition = new Vector2(savedPosition.X + 59, savedPosition.Y);
+                rightKeyReleased = false;
+            }
+
+            for (int x = 0; x < 15; x++)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && Keyboard.GetState().IsKeyDown(Keys.Right))
+                {
+                    if (bluePiecePosition.X == blackPiecePosition[x].X + 59 && bluePiecePosition.Y == blackPiecePosition[x].Y)
+                    {
+                        Vector2 newPosition = new Vector2(blackPiecePosition[x].X + 59, blackPiecePosition[x].Y);
+                        blackPiecePosition[x] = newPosition;
+                    }
+
+                    else if (bluePiecePosition.X == whitePiecePosition[x].X + 59 && bluePiecePosition.Y == whitePiecePosition[x].Y)
+                    {
+                        Vector2 newPosition = new Vector2(whitePiecePosition[x].X + 59, whitePiecePosition[x].Y);
+                        whitePiecePosition[x] = newPosition;
+                    }
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Right))
+            {
+                rightKeyReleased = true;
+            }
+
+            // Left Key Logic
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) && leftKeyReleased == true)
+            {
+                savedPosition = bluePiecePosition;
+                bluePiecePosition = new Vector2(savedPosition.X - 59, savedPosition.Y);
+                leftKeyReleased = false;
+            }
+
+            for (int x = 0; x < 15; x++)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && Keyboard.GetState().IsKeyDown(Keys.Left))
+                {
+                    if (bluePiecePosition.X == blackPiecePosition[x].X - 59 && bluePiecePosition.Y == blackPiecePosition[x].Y)
+                    {
+                        Vector2 newPosition = new Vector2(blackPiecePosition[x].X - 59, blackPiecePosition[x].Y);
+                        blackPiecePosition[x] = newPosition;
+                    }
+
+                    else if (bluePiecePosition.X == whitePiecePosition[x].X - 59 && bluePiecePosition.Y == whitePiecePosition[x].Y)
+                    {
+                        Vector2 newPosition = new Vector2(whitePiecePosition[x].X - 59, whitePiecePosition[x].Y);
+                        whitePiecePosition[x] = newPosition;
+                    }
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Left))
+            {
+                leftKeyReleased = true;
+            }
+
+            // Up Key Logic
+            if (Keyboard.GetState().IsKeyDown(Keys.Up) && upKeyReleased == true)
+            {
+                savedPosition = bluePiecePosition;
+                bluePiecePosition = new Vector2(savedPosition.X, savedPosition.Y - 39);
+                upKeyReleased = false;
+            }
+
+            for (int x = 0; x < 15; x++)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && Keyboard.GetState().IsKeyDown(Keys.Up))
+                {
+                    if (bluePiecePosition.Y == blackPiecePosition[x].Y - 39 && bluePiecePosition.X == blackPiecePosition[x].X)
+                    {
+                        Vector2 newPosition = new Vector2(blackPiecePosition[x].X, blackPiecePosition[x].Y - 39);
+                        blackPiecePosition[x] = newPosition;
+                    }
+
+                    else if (bluePiecePosition.Y == whitePiecePosition[x].Y - 39 && bluePiecePosition.X == whitePiecePosition[x].X)
+                    {
+                        Vector2 newPosition = new Vector2(whitePiecePosition[x].X, whitePiecePosition[x].Y - 39);
+                        whitePiecePosition[x] = newPosition;
+                    }
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Up))
+            {
+                upKeyReleased = true;
+            }
+
+            // Down Key Logic
+            if (Keyboard.GetState().IsKeyDown(Keys.Down) && downKeyReleased == true)
+            {
+                savedPosition = bluePiecePosition;
+                bluePiecePosition = new Vector2(savedPosition.X, savedPosition.Y + 39);
+                downKeyReleased = false;
+            }
+
+            for (int x = 0; x < 15; x++)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space) && Keyboard.GetState().IsKeyDown(Keys.Down))
+                {
+                    if (bluePiecePosition.Y == blackPiecePosition[x].Y + 39 && bluePiecePosition.X == blackPiecePosition[x].X)
+                    {
+                        Vector2 newPosition = new Vector2(blackPiecePosition[x].X, blackPiecePosition[x].Y + 39);
+                        blackPiecePosition[x] = newPosition;
+                    }
+
+                    else if (bluePiecePosition.Y == whitePiecePosition[x].Y + 39 && bluePiecePosition.X == whitePiecePosition[x].X)
+                    {
+                        Vector2 newPosition = new Vector2(whitePiecePosition[x].X, whitePiecePosition[x].Y + 39);
+                        whitePiecePosition[x] = newPosition;
+                    }
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Down))
+            {
+                downKeyReleased = true;
+            }
+
+            // Roll Dice Button Logic
             if (mState.LeftButton == ButtonState.Pressed && mReleased == true)
             {
                 float mouseRollDiceButtonDistance = Vector2.Distance(new Vector2(RollDiceButtonPosition.X + RollDiceButtonRadius, RollDiceButtonPosition.Y + RollDiceButtonRadius), mState.Position.ToVector2());
@@ -146,7 +350,6 @@ namespace TryMovingPieces
                     RollDice();
                     mReleased = false;
                 }
-          
             }
 
             if (mState.LeftButton == ButtonState.Released)
@@ -159,60 +362,27 @@ namespace TryMovingPieces
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.White);
 
             _spriteBatch.Begin();
-            _spriteBatch.Draw(
-                    gameBoard,
-                    gameBoardPosition,
-                    null,
-                    Color.White,
-                    Of,
-                    new Vector2(gameBoard.Width / 2, gameBoard.Height / 2),
-                    Vector2.One,
-                    SpriteEffects.None,
-                    Of
-                );
-
+            _spriteBatch.Draw(gameBoard, gameBoardPosition, null, Color.White, Of, new Vector2(gameBoard.Width / 2, gameBoard.Height / 2), Vector2.One, SpriteEffects.None, Of);
             for (int x = 0; x < 6; x++)
             {
-                _spriteBatch.Draw(DarkTrianglesPointingDown[x], new Vector2((118 * x) + 49, 2), Color.White);
-                _spriteBatch.Draw(LightTrianglesPointingDown[x], new Vector2((118 * x) + 109, 2), Color.White);
+                _spriteBatch.Draw(darkTrianglesPointingDown[x], new Vector2((118 * x) + 49, 2), Color.White);
+                _spriteBatch.Draw(lightTrianglesPointingDown[x], new Vector2((118 * x) + 109, 2), Color.White);
+                _spriteBatch.Draw(darkTrianglesPointingUp[x], new Vector2((118 * x) + 109, 280), Color.White);
+                _spriteBatch.Draw(lightTrianglesPointingUp[x], new Vector2((118 * x) + 49, 280), Color.White);
             }
 
-            for (int x = 0; x < 6; x++)
-            {
-                _spriteBatch.Draw(LightTrianglesPointingUp[x], new Vector2((118 * x) + 49, 280), Color.White);
-                _spriteBatch.Draw(DarkTrianglesPointingUp[x], new Vector2((118 * x) + 109, 280), Color.White);
-            }
-
-            for (int y = 0; y < 5; y++)
+            for (int y = 0; y < 15; y++)
             {
                 // Black Pieces Left Stack of 5
-                _spriteBatch.Draw(blackPieces[y], new Vector2(xPosition[11], yPosition[y]), Color.Black);
+                _spriteBatch.Draw(blackPieces[y], blackPiecePosition[y], Color.Black);
                 // White Pieces Left Stack of 5
-                _spriteBatch.Draw(whitePieces[y], new Vector2(xPosition[11], yPosition[y + 6]), Color.White);
-                // Black Pieces Right Stack of 5
-                _spriteBatch.Draw(blackPieces[y + 8], new Vector2(xPosition[5], yPosition[y + 6]), Color.Black);
-                // White Pieces Right Stack of 5
-                _spriteBatch.Draw(whitePieces[y + 8], new Vector2(xPosition[5], yPosition[y]), Color.White);
+                _spriteBatch.Draw(whitePieces[y], whitePiecePosition[y], Color.White);
             }
 
-            for (int y = 0; y < 3; y++)
-            {
-                // Black Pieces Left Stack of 3
-                _spriteBatch.Draw(blackPieces[y + 5], new Vector2(xPosition[7], yPosition[y + 6]), Color.Black);
-                // White Pieces Left Stack of 3
-                _spriteBatch.Draw(whitePieces[y + 5], new Vector2(xPosition[7], yPosition[y]), Color.White);
-            }
-
-            for (int y = 0; y < 2; y++)
-            {
-                // Black Pieces Right Stack of 2
-                _spriteBatch.Draw(blackPieces[y + 13], new Vector2(xPosition[0], yPosition[y]), Color.Black);
-                // White Pieces Left Stack of 3
-                _spriteBatch.Draw(whitePieces[y + 13], new Vector2(xPosition[0], yPosition[y + 6]), Color.White);
-            }
+            _spriteBatch.Draw(bluePiece, bluePiecePosition, Color.White);
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
             _spriteBatch.Draw(dieTwo[valueDieTwo], new Vector2(250, 226), Color.White);
@@ -225,10 +395,17 @@ namespace TryMovingPieces
 
             _spriteBatch.Draw(rollDiceButton, RollDiceButtonPosition, Color.White);
 
-            _spriteBatch.Draw(whosTurn[0], new Vector2(450 ,230), Color.White);
+            if (player1Wins == true)
+            {
+                _spriteBatch.Draw(winner[0], new Vector2(0,0), null, Color.White, Of, new Vector2(gameBoard.Width / 3, gameBoard.Height / 3), Vector2.One, SpriteEffects.None, Of);
+            }
+
+            if (player2Wins == true)
+            {
+                _spriteBatch.Draw(winner[1], new Vector2(0,0), null, Color.White, Of, new Vector2(gameBoard.Width / 3, gameBoard.Height / 3), Vector2.One, SpriteEffects.None, Of);
+            }
 
             _spriteBatch.End();
-
 
             base.Draw(gameTime);
         }
