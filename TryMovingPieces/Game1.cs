@@ -22,6 +22,7 @@ namespace TryMovingPieces
         Texture2D[] blackPieces = new Texture2D[15];
         Texture2D[] whitePieces = new Texture2D[15];
         Texture2D[] winner = new Texture2D[2];
+        Texture2D[] gameStartScreens = new Texture2D[3];
         Vector2 bluePiecePosition;
         Vector2 savedPosition;
         Vector2 gameBoardPosition;
@@ -31,6 +32,7 @@ namespace TryMovingPieces
         int[] xPosition = new int[12];
         bool rightKeyReleased;
         bool leftKeyReleased;
+        bool enterKeyReleased;
         bool upKeyReleased;
         bool downKeyReleased;
         bool mReleased;
@@ -39,6 +41,7 @@ namespace TryMovingPieces
         float Of;
         MouseState mState;
         Song song;
+        int screenCount = 0;
 
         Random random = new Random();
         Texture2D[] dieOne = new Texture2D[6];
@@ -171,6 +174,10 @@ namespace TryMovingPieces
             dieFour[3] = Content.Load<Texture2D>("whitedie4");
             dieFour[4] = Content.Load<Texture2D>("whitedie5");
             dieFour[5] = Content.Load<Texture2D>("whitedie6");
+
+            gameStartScreens[0] = Content.Load<Texture2D>("Welcome");
+            gameStartScreens[1] = Content.Load<Texture2D>("Background");
+            gameStartScreens[2] = Content.Load<Texture2D>("Controls");
         }
 
         protected override void Update(GameTime gameTime)
@@ -356,7 +363,20 @@ namespace TryMovingPieces
             {
                 mReleased = true;
             }
+            
+            if (Keyboard.GetState().IsKeyDown(Keys.Enter) && enterKeyReleased == true)
+            {
+                screenCount++;
+                enterKeyReleased = false;
+            }
 
+            if (Keyboard.GetState().IsKeyUp(Keys.Enter))
+            {
+                enterKeyReleased = true;
+            }
+
+
+            
             base.Update(gameTime);
         }
 
@@ -397,13 +417,22 @@ namespace TryMovingPieces
 
             if (player1Wins == true)
             {
-                _spriteBatch.Draw(winner[0], new Vector2(0,0), null, Color.White, Of, new Vector2(gameBoard.Width / 3, gameBoard.Height / 3), Vector2.One, SpriteEffects.None, Of);
+                _spriteBatch.Draw(winner[0], new Vector2 (-230,0), null, Color.White, 0f, Vector2.Zero, 0.47f, SpriteEffects.None, 0f);
             }
 
             if (player2Wins == true)
             {
-                _spriteBatch.Draw(winner[1], new Vector2(0,0), null, Color.White, Of, new Vector2(gameBoard.Width / 3, gameBoard.Height / 3), Vector2.One, SpriteEffects.None, Of);
+                _spriteBatch.Draw(winner[1], new Vector2 (-210,0), null, Color.White, 0f, Vector2.Zero, 0.47f, SpriteEffects.None, 0f);
             }
+
+            if (screenCount == 0)
+            _spriteBatch.Draw(gameStartScreens[0], new Vector2 (-35,0), null, Color.White, 0f, Vector2.Zero, 0.55f, SpriteEffects.None, 0f);
+            
+            if (screenCount == 1)
+            _spriteBatch.Draw(gameStartScreens[1], new Vector2 (-35,0), null, Color.White, 0f, Vector2.Zero, 0.55f, SpriteEffects.None, 0f);
+
+            if (screenCount == 2)
+            _spriteBatch.Draw(gameStartScreens[2], new Vector2 (-68,0), null, Color.White, 0f, Vector2.Zero, 0.55f, SpriteEffects.None, 0f);
 
             _spriteBatch.End();
 
