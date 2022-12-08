@@ -109,6 +109,18 @@
 /processorParam:TextureFormat=Color
 /build:BlackPiece.png
 
+#begin BlackStar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:BlackStar.png
+
 #begin BlankGameBoard.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -438,4 +450,16 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:WhitePiece.png
+
+#begin WhiteStar.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:WhiteStar.png
 

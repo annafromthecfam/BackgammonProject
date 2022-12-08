@@ -22,6 +22,7 @@ namespace TryMovingPieces
         Texture2D[] blackPieces = new Texture2D[15];
         Texture2D[] whitePieces = new Texture2D[15];
         Texture2D[] winner = new Texture2D[2];
+        Texture2D[] stars = new Texture2D[2];
         Texture2D[] gameStartScreens = new Texture2D[3];
         Vector2 bluePiecePosition;
         Vector2 savedPosition;
@@ -123,6 +124,8 @@ namespace TryMovingPieces
 
             bluePiece = Content.Load<Texture2D>("BluePiece");
             gameBoard = Content.Load<Texture2D>("BlankGameBoard");
+            stars[0] = Content.Load<Texture2D>("BlackStar");
+            stars[1] = Content.Load<Texture2D>("WhiteStar");
             this.song = Content.Load<Song>("testsoundeffect2");
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;
@@ -396,13 +399,13 @@ namespace TryMovingPieces
 
             for (int y = 0; y < 15; y++)
             {
-                // Black Pieces Left Stack of 5
                 _spriteBatch.Draw(blackPieces[y], blackPiecePosition[y], Color.Black);
-                // White Pieces Left Stack of 5
                 _spriteBatch.Draw(whitePieces[y], whitePiecePosition[y], Color.White);
             }
-
             _spriteBatch.Draw(bluePiece, bluePiecePosition, Color.White);
+
+            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
+            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
             _spriteBatch.Draw(dieTwo[valueDieTwo], new Vector2(250, 226), Color.White);
