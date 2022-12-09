@@ -70,7 +70,6 @@ namespace TryMovingPieces
         }
         void MediaPlayer_MediaStateChanged(object sender, System.EventArgs e)
         {
-           // 0.0f is silent, 1.0f is full volume
            MediaPlayer.Volume -= 0.1f;
            MediaPlayer.Play(song);
         }
@@ -129,7 +128,6 @@ namespace TryMovingPieces
             this.song = Content.Load<Song>("testsoundeffect2");
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;
-            MediaPlayer.MediaStateChanged += MediaPlayer_MediaStateChanged;
 
             winner[0] = Content.Load<Texture2D>("PlayerOneWin");
             winner[1] = Content.Load<Texture2D>("PlayerTwoWin");
