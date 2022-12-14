@@ -376,6 +376,24 @@ namespace TryMovingPieces
                 enterKeyReleased = true;
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.U))
+            {
+                for (int y = 1; y < 15; y++)
+                {
+                    for (int x = y; x < 15; x++)
+                    {
+                        if (blackPiecePosition[y - 1] == blackPiecePosition[x] || blackPiecePosition[y - 1] == whitePiecePosition[x] && blackPiecePosition[y - 1] != new Vector2(xPosition[11] + 59, yPosition[11]))
+                        {
+                            blackPiecePosition[y - 1] = new Vector2(blackPiecePosition[y - 1].X, blackPiecePosition[y - 1].Y + 39);
+                        }
+                        if (whitePiecePosition[y - 1] == whitePiecePosition[x])
+                        { 
+                            whitePiecePosition[y - 1] = new Vector2(whitePiecePosition[y - 1].X, whitePiecePosition[y - 1].Y + 39);
+                        }
+                    }
+                }
+            }
+
 
             
             base.Update(gameTime);
@@ -402,8 +420,8 @@ namespace TryMovingPieces
             }
             _spriteBatch.Draw(bluePiece, bluePiecePosition, Color.White);
 
-            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
-            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
+            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
+            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
             _spriteBatch.Draw(dieTwo[valueDieTwo], new Vector2(250, 226), Color.White);
