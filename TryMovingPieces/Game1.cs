@@ -420,8 +420,8 @@ namespace TryMovingPieces
             }
             _spriteBatch.Draw(bluePiece, bluePiecePosition, Color.White);
 
-            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
-            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
+            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
+            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
             _spriteBatch.Draw(dieTwo[valueDieTwo], new Vector2(250, 226), Color.White);
