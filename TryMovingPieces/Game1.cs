@@ -376,6 +376,24 @@ namespace TryMovingPieces
                 enterKeyReleased = true;
             }
 
+            if (Keyboard.GetState().IsKeyDown(Keys.U))
+            {
+                for (int y = 1; y < 15; y++)
+                {
+                    for (int x = y; x < 15; x++)
+                    {
+                        if (blackPiecePosition[y - 1] == blackPiecePosition[x] || blackPiecePosition[y - 1] == whitePiecePosition[x] && blackPiecePosition[y - 1] != new Vector2(xPosition[11] + 59, yPosition[11]))
+                        {
+                            blackPiecePosition[y - 1] = new Vector2(blackPiecePosition[y - 1].X, blackPiecePosition[y - 1].Y + 39);
+                        }
+                        if (whitePiecePosition[y - 1] == whitePiecePosition[x])
+                        { 
+                            whitePiecePosition[y - 1] = new Vector2(whitePiecePosition[y - 1].X, whitePiecePosition[y - 1].Y + 39);
+                        }
+                    }
+                }
+            }
+
 
             
             base.Update(gameTime);
