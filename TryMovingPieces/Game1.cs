@@ -186,40 +186,40 @@ namespace TryMovingPieces
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if (blackPiecePosition[0] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[1] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[2] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[3] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[4] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[5] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[6] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[7] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[8] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[9] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[10] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[11] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[12] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[13] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
-                blackPiecePosition[14] == new Vector2(xPosition[11] + 59, yPosition[0]))
+            if (whitePiecePosition[0] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[1] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[2] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[3] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[4] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[5] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[6] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[7] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[8] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[9] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[10] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[11] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[12] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[13] == new Vector2(xPosition[11] + 59, yPosition[0]) &&
+                whitePiecePosition[14] == new Vector2(xPosition[11] + 59, yPosition[0]))
             {
                 player1Wins = true;
             }
 
-            if (whitePiecePosition[0] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[1] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[2] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[3] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[4] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[5] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[6] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[7] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[8] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[9] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[10] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[11] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[12] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[13] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
-                whitePiecePosition[14] == new Vector2(xPosition[11] + 59, yPosition[11]))
+            if (blackPiecePosition[0] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[1] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[2] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[3] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[4] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[5] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[6] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[7] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[8] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[9] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[10] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[11] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[12] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[13] == new Vector2(xPosition[11] + 59, yPosition[11]) &&
+                blackPiecePosition[14] == new Vector2(xPosition[11] + 59, yPosition[11]))
             {
                 player2Wins = true;
             }
@@ -420,8 +420,8 @@ namespace TryMovingPieces
             }
             _spriteBatch.Draw(bluePiece, bluePiecePosition, Color.White);
 
-            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
-            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
+            _spriteBatch.Draw(stars[0], new Vector2(xPosition[11] + 59, yPosition[0]), Color.White);
+            _spriteBatch.Draw(stars[1], new Vector2(xPosition[11] + 59, yPosition[11]), Color.White);
 
             _spriteBatch.Draw(dieOne[valueDieOne], new Vector2(190, 226), Color.White);
             _spriteBatch.Draw(dieTwo[valueDieTwo], new Vector2(250, 226), Color.White);
