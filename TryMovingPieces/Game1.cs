@@ -125,7 +125,7 @@ namespace TryMovingPieces
             gameBoard = Content.Load<Texture2D>("BlankGameBoard");
             stars[0] = Content.Load<Texture2D>("BlackStar");
             stars[1] = Content.Load<Texture2D>("WhiteStar");
-            this.song = Content.Load<Song>("testsoundeffect2");
+            this.song = Content.Load<Song>("AnjasGameV2");
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = true;
 
