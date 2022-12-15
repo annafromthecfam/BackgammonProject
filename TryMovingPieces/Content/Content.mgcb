@@ -13,6 +13,12 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin AnjasGameV2.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:AnjasGameV2.mp3
+
 #begin Background.jpg
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -348,12 +354,6 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:SpotAvailablePointingUp.png
-
-#begin testsoundeffect2.mp3
-/importer:Mp3Importer
-/processor:SongProcessor
-/processorParam:Quality=Best
-/build:testsoundeffect2.mp3
 
 #begin Welcome.jpg
 /importer:TextureImporter
